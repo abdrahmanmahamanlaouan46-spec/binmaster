@@ -30,3 +30,32 @@ Stage Summary:
 - Gamified training system with badges, XP, levels, streaks
 - Dark mode and responsive design implemented
 - Lint passes clean
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Integrate AI assistant (BinBot) into BinMaster using z-ai-web-dev-sdk
+
+Work Log:
+- Read LLM skill documentation for z-ai-web-dev-sdk
+- Created /api/ai-chat API route with specialized pedagogical system prompt for binary education
+- Created AIAssistant floating chat component with:
+  - Animated floating button with notification dot
+  - Chat window with header, messages area, and input
+  - Suggested questions for quick start
+  - Message history with user/assistant bubbles
+  - Loading state with spinner
+  - Clear chat functionality
+- Added BinBot sidebar hint in Navigation component
+- Added Sparkles import to Navigation
+- Integrated AIAssistant component into main page layout
+- Tested AI chat with Agent Browser - both suggested and custom questions work perfectly
+- AI responds with detailed, pedagogical, emoji-rich explanations in French
+
+Stage Summary:
+- AI assistant "BinBot" fully integrated using z-ai-web-dev-sdk (server-side only)
+- Floating chat bubble accessible from any section
+- Specialized system prompt for binary/decimal education
+- Multi-turn conversation support
+- 5 suggested questions for quick access
+- All lint checks pass

@@ -11,6 +11,7 @@ import { TrainingMode } from "@/components/sections/TrainingMode";
 import { HistorySection } from "@/components/sections/HistorySection";
 import { TheorySection } from "@/components/sections/TheorySection";
 import { ProgressSection } from "@/components/sections/ProgressSection";
+import { AIAssistant } from "@/components/shared/AIAssistant";
 
 function SectionRenderer() {
   const { currentSection } = useAppStore();
@@ -66,6 +67,7 @@ export default function HomePage() {
       <main className="flex-1 md:ml-64 pt-16 md:pt-0">
         <SectionRenderer />
       </main>
+      <AIAssistant />
     </div>
   );
 }

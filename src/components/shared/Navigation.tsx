@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   Zap,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
@@ -118,6 +119,17 @@ export function Navigation() {
               {item.label}
             </button>
           ))}
+
+          {/* AI Assistant hint */}
+          <div className="mt-4 px-3 py-3 rounded-lg bg-primary/5 border border-primary/10">
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-xs font-semibold">BinBot IA</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground leading-relaxed">
+              Assistant intelligent disponible en bas à droite →
+            </p>
+          </div>
         </nav>
 
         {/* Theme toggle */}
