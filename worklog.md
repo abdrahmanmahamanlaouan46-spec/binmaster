@@ -58,4 +58,49 @@ Stage Summary:
 - Specialized system prompt for binary/decimal education
 - Multi-turn conversation support
 - 5 suggested questions for quick access
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Optimize AI chat interface UX — table rendering, responsive design, modern UI
+
+Work Log:
+- Identified root cause: react-markdown doesn't support tables without remark-gfm plugin
+- Installed remark-gfm package for GitHub Flavored Markdown table support
+- Created ChatMarkdownRenderer component with:
+  - remark-gfm plugin for proper table/list rendering
+  - Custom styled table components (thead, th, td, tr) with hover effects, zebra striping
+  - Proper bold rendering with primary color accent
+  - Ordered/unordered list styling
+  - Code block and inline code styling
+  - Blockquote styling for tips/notes
+- Added CSS in globals.css for .chat-markdown with:
+  - Table styling: padding, borders, font-variant-numeric for alignment
+  - Zebra striping (even rows highlighted)
+  - Row hover effects
+  - Custom scrollbar for horizontal overflow
+  - Primary color for bold text
+- Redesigned AIAssistant component with:
+  - Larger chat window (420px default, 520px expanded)
+  - Expand/minimize button (Agrandir/Réduire)
+  - Bot avatar next to AI messages
+  - Animated typing indicator (3 bouncing dots)
+  - Emoji-prefixed suggested questions with hover effects
+  - Better scroll management with ref-based scrolling
+  - Improved input area with rounded corners
+  - Status indicator (green pulse dot) in header
+  - Clear conversation button
+- Updated system prompt to encourage Markdown table usage with proper examples
+- Added preprocessing for merged table rows (AI sometimes puts all rows on one line)
+- Tested table rendering: tables now render as proper HTML with headers, rows, cells
+- Verified dark mode compatibility
+- Verified mobile responsive design
+
+Stage Summary:
+- Tables now render as proper HTML with styled headers, zebra striping, hover effects
+- remark-gfm enables full GFM support (tables, strikethrough, etc.)
+- Chat window is expandable for better table readability
+- All formatting (bold, lists, code, headings) renders correctly
+- Dark mode fully supported
+- Mobile responsive with horizontal scroll for wide tables
 - All lint checks pass

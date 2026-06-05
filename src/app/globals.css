@@ -120,3 +120,88 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* =========================================
+   Chat Markdown Renderer Styles
+   Tables, code, and rich content in AI chat
+   ========================================= */
+.chat-markdown {
+  line-height: 1.6;
+}
+
+.chat-markdown table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.chat-markdown table thead {
+  background: oklch(from var(--primary) l c h / 8%);
+  border-bottom: 2px solid oklch(from var(--primary) l c h / 15%);
+}
+
+.chat-markdown table th {
+  padding: 8px 12px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--foreground);
+}
+
+.chat-markdown table td {
+  padding: 7px 12px;
+  white-space: nowrap;
+  color: oklch(from var(--foreground) l c h / 90%);
+  font-variant-numeric: tabular-nums;
+}
+
+.chat-markdown table tr {
+  border-bottom: 1px solid oklch(from var(--border) l c h / 30%);
+}
+
+.chat-markdown table tr:last-child {
+  border-bottom: none;
+}
+
+.chat-markdown table tr:nth-child(even) {
+  background: oklch(from var(--muted) l c h / 15%);
+}
+
+.chat-markdown table tr:hover {
+  background: oklch(from var(--muted) l c h / 30%);
+}
+
+/* Scrollable table wrapper */
+.chat-markdown .overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(from var(--border) l c h / 60%) transparent;
+}
+
+.chat-markdown .overflow-x-auto::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chat-markdown .overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-markdown .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: oklch(from var(--border) l c h / 60%);
+  border-radius: 4px;
+}
+
+/* Chat scroll area custom scrollbar */
+.chat-markdown strong {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Smooth scrolling for chat messages area */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
