@@ -15,48 +15,27 @@ interface ChatMarkdownRendererProps {
  * 2. Tables where all rows are on a single line (needs splitting)
  */
 function preprocessMarkdown(content: string): string {
-  // Only process lines that look like they contain multiple merged table rows
-  // A merged table line has the pattern: | cell | cell | | cell | cell | | cell | cell |
-  // where "| |" indicates the boundary between rows
-
   const lines = content.split("\n");
   const processed: string[] = [];
 
   for (const line of lines) {
     const trimmed = line.trim();
 
-    // Only process lines that start with | and contain the row boundary pattern "| |"
     if (!trimmed.startsWith("|") || !trimmed.includes("| |")) {
       processed.push(line);
       continue;
     }
 
-    // Check if this line has the separator row pattern merged with data
-    // e.g., | Header | Header | |--------|--------| | data | data |
-    // The separator row matches: |[-:]+[-: ]*\|[-:]+[-: ]*\|
-
-    // Count occurrences of "row boundary" patterns: `| ` at the end followed by `|` at the start
-    // This is different from a normal cell separator like `| 1 |`
-
-    // Strategy: if a line contains a separator pattern (dashes) AND data after it on the same line,
-    // then it's merged and needs splitting.
-
     const hasSeparator = /\|[\s\-:]+\|/.test(trimmed);
     const hasDataAfterSeparator = hasSeparator &&
-      trimmed.indexOf("|-") < trimmed.length - 20; // separator not at the end
+      trimmed.indexOf("|-") < trimmed.length - 20;
 
     if (hasSeparator && hasDataAfterSeparator) {
-      // This line has merged rows - split at row boundaries
-      // Replace "| |" patterns (row boundaries) with "|\n|"
       const fixed = trimmed.replace(/\| \|/g, "|\n|");
       processed.push(...fixed.split("\n"));
     } else if (trimmed.includes("| |")) {
-      // No separator found but has "| |" - might be merged data rows
-      // Check if there are too many pipe groups for a single row
-      // A single row typically has 2-6 cells (3-7 pipes)
       const pipeGroups = (trimmed.match(/\|[^|]+\|/g) || []).length;
 
-      // If there are more pipe groups than a typical row, split them
       if (pipeGroups > 7) {
         const fixed = trimmed.replace(/\| \|/g, "|\n|");
         processed.push(...fixed.split("\n"));
@@ -74,6 +53,7 @@ function preprocessMarkdown(content: string): string {
 /**
  * Custom markdown renderer optimized for AI chat messages.
  * Renders tables, bold, lists, code, etc. with proper responsive styling.
+ * Tables are ultra-readable with large text, generous padding, and horizontal scroll.
  */
 export function ChatMarkdownRenderer({ content }: ChatMarkdownRendererProps) {
   const processedContent = useMemo(() => preprocessMarkdown(content), [content]);
@@ -83,31 +63,31 @@ export function ChatMarkdownRenderer({ content }: ChatMarkdownRendererProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // Table wrapper with horizontal scroll
+          // Table wrapper with horizontal scroll — NEVER breaks layout
           table: ({ children }) => (
-            <div className="my-3 -mx-1 overflow-x-auto rounded-lg border border-border/60 bg-muted/20 shadow-sm">
-              <table className="w-full min-w-[280px] text-[13px] leading-relaxed">
+            <div className="my-3 -mx-2 overflow-x-auto rounded-xl border border-border/60 bg-muted/15 shadow-sm scrollbar-thin">
+              <table className="w-full min-w-[320px] text-sm leading-relaxed border-collapse">
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-primary/8 border-b-2 border-primary/15">
+            <thead className="bg-primary/10 border-b-2 border-primary/20">
               {children}
             </thead>
           ),
           th: ({ children }) => (
-            <th className="px-3 py-2.5 text-left font-bold text-foreground whitespace-nowrap text-[13px]">
+            <th className="px-4 py-3 text-left font-bold text-foreground whitespace-nowrap text-sm tracking-wide">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="px-3 py-2 text-foreground/90 whitespace-nowrap">
+            <td className="px-4 py-2.5 text-foreground/90 whitespace-nowrap text-sm">
               {children}
             </td>
           ),
           tr: ({ children }) => (
-            <tr className="border-b border-border/30 last:border-0 even:bg-muted/15 hover:bg-muted/25 transition-colors">
+            <tr className="border-b border-border/25 last:border-0 even:bg-muted/20 hover:bg-primary/5 transition-colors">
               {children}
             </tr>
           ),
@@ -119,24 +99,24 @@ export function ChatMarkdownRenderer({ content }: ChatMarkdownRendererProps) {
           ),
           // Unordered lists
           ul: ({ children }) => (
-            <ul className="my-2 ml-4 space-y-1 list-disc list-outside">
+            <ul className="my-2 ml-5 space-y-1 list-disc list-outside">
               {children}
             </ul>
           ),
           // Ordered lists (great for step-by-step)
           ol: ({ children }) => (
-            <ol className="my-2 ml-4 space-y-1 list-decimal list-outside">
+            <ol className="my-2 ml-5 space-y-1 list-decimal list-outside">
               {children}
             </ol>
           ),
           li: ({ children }) => (
-            <li className="text-[13px] leading-relaxed pl-1">
+            <li className="text-sm leading-relaxed pl-1">
               {children}
             </li>
           ),
           // Paragraphs
           p: ({ children }) => (
-            <p className="my-1.5 text-[13px] leading-relaxed first:mt-0 last:mb-0">
+            <p className="my-1.5 text-sm leading-relaxed first:mt-0 last:mb-0">
               {children}
             </p>
           ),
@@ -152,19 +132,19 @@ export function ChatMarkdownRenderer({ content }: ChatMarkdownRendererProps) {
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-[14px] font-semibold mt-2 mb-1 text-foreground">
+            <h3 className="text-sm font-semibold mt-2 mb-1 text-foreground">
               {children}
             </h3>
           ),
           // Inline code
           code: ({ children }) => (
-            <code className="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-mono text-[12px] font-semibold">
+            <code className="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-mono text-[13px] font-semibold">
               {children}
             </code>
           ),
           // Code blocks
           pre: ({ children }) => (
-            <pre className="my-2 p-3 rounded-lg bg-muted/50 border border-border/40 overflow-x-auto text-[12px] leading-relaxed">
+            <pre className="my-2 p-3 rounded-lg bg-muted/50 border border-border/40 overflow-x-auto text-[13px] leading-relaxed">
               {children}
             </pre>
           ),

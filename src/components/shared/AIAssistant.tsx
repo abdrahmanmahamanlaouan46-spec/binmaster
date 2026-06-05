@@ -7,7 +7,6 @@ import {
   X,
   Send,
   Sparkles,
-  Loader2,
   Trash2,
   Maximize2,
   Minimize2,
@@ -112,13 +111,13 @@ export function AIAssistant() {
     }
   };
 
-  // Chat window sizing
+  // Chat window sizing — responsive
   const chatWidth = isExpanded
-    ? "w-[calc(100vw-2rem)] sm:w-[520px]"
-    : "w-[calc(100vw-2rem)] sm:w-[420px]";
+    ? "w-[calc(100vw-1.5rem)] sm:w-[560px]"
+    : "w-[calc(100vw-1.5rem)] sm:w-[440px]";
   const chatHeight = isExpanded
-    ? "max-h-[85vh]"
-    : "max-h-[70vh]";
+    ? "max-h-[80vh]"
+    : "max-h-[65vh]";
 
   return (
     <>
@@ -132,7 +131,7 @@ export function AIAssistant() {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-5 right-5 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+            className="fixed bottom-20 right-4 md:bottom-5 md:right-5 z-50 h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
             aria-label="Ouvrir l'assistant IA"
           >
             <MessageCircle className="h-6 w-6 group-hover:scale-110 transition-transform" />
@@ -157,7 +156,7 @@ export function AIAssistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className={`fixed bottom-5 right-5 z-50 ${chatWidth} ${chatHeight} flex flex-col`}
+            className={`fixed bottom-16 md:bottom-5 right-2 md:right-5 z-50 ${chatWidth} ${chatHeight} flex flex-col`}
           >
             <div className="flex flex-col h-full shadow-2xl border border-border rounded-2xl overflow-hidden bg-background">
               {/* Header */}
@@ -218,19 +217,19 @@ export function AIAssistant() {
               >
                 {/* Welcome state */}
                 {messages.length === 0 && !isLoading && (
-                  <div className="text-center py-6 px-2">
-                    <div className="h-16 w-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4 shadow-sm">
-                      <Bot className="h-8 w-8" />
+                  <div className="text-center py-4 px-2">
+                    <div className="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 shadow-sm">
+                      <Bot className="h-7 w-7" />
                     </div>
                     <h4 className="font-bold text-base mb-1">
                       Salut ! Je suis BinBot 🤖
                     </h4>
-                    <p className="text-sm text-muted-foreground mb-5 max-w-[280px] mx-auto leading-relaxed">
+                    <p className="text-sm text-muted-foreground mb-4 max-w-[280px] mx-auto leading-relaxed">
                       Pose-moi tes questions sur le binaire, je suis là pour t'aider !
                     </p>
 
                     {/* Suggested questions */}
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest mb-2">
                         Questions suggérées
                       </p>
@@ -270,8 +269,8 @@ export function AIAssistant() {
                     <div
                       className={`${
                         msg.role === "user"
-                          ? "max-w-[80%] bg-primary text-primary-foreground rounded-2xl rounded-br-md px-4 py-2.5"
-                          : "max-w-[90%] bg-muted/60 rounded-2xl rounded-bl-md px-4 py-2.5"
+                          ? "max-w-[85%] bg-primary text-primary-foreground rounded-2xl rounded-br-md px-4 py-2.5"
+                          : "max-w-[92%] bg-muted/60 rounded-2xl rounded-bl-md px-4 py-2.5"
                       }`}
                     >
                       {msg.role === "user" ? (

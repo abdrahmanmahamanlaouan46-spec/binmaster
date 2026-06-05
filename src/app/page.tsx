@@ -39,7 +39,7 @@ function SectionRenderer() {
 }
 
 export default function HomePage() {
-  const { currentSection, setProgress, setHistory } = useAppStore();
+  const { setProgress, setHistory } = useAppStore();
 
   // Load initial data
   useEffect(() => {
@@ -63,8 +63,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      {/* Main content area - offset for mobile top bar and desktop sidebar */}
-      <main className="flex-1 md:ml-64 pt-16 md:pt-0">
+      {/* Main content area: offset for mobile top bar + bottom tab bar, and desktop sidebar */}
+      <main className="flex-1 md:ml-64 pt-[52px] pb-[68px] md:pb-0 md:pt-0">
         <SectionRenderer />
       </main>
       <AIAssistant />

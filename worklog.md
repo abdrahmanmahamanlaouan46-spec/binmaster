@@ -104,3 +104,41 @@ Stage Summary:
 - Dark mode fully supported
 - Mobile responsive with horizontal scroll for wide tables
 - All lint checks pass
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Make features (Dashboard, Training, etc.) clearly visible and accessible to students
+
+Work Log:
+- Analyzed current navigation UX issues: features hidden behind hamburger menu on mobile, sidebar not obvious
+- Completely redesigned Navigation component with:
+  - Mobile bottom tab bar (5 primary tabs: Accueil, Convertir, S'entraîner, Théorie, Progrès) always visible like Duolingo
+  - Mobile top bar with logo + theme toggle + "More" button (opens Sheet with all features)
+  - Desktop sidebar with grouped sections (Principal, Apprentissage, Statistiques) with descriptions
+  - Active tab indicator with animated dot (layoutId animation)
+  - Sheet component for "More" menu showing all 8 features with icons, labels, descriptions
+  - AI assistant hint card in both sidebar and mobile more menu
+- Updated page.tsx layout for new navigation:
+  - Mobile: top bar offset (pt-[52px]) + bottom tab bar offset (pb-[68px])
+  - Desktop: sidebar offset (md:ml-64) unchanged
+- Enhanced Landing Page with feature navigation hub:
+  - New "Que veux-tu faire ? 🎯" section with 6 large, colorful navigation cards
+  - Each card has: icon, label, description, hover effects, distinct color
+  - Cards link to: Dashboard, Déc→Bin, Bin→Déc, Entraînement, Théorie, Progrès
+  - Cards are responsive: 2 columns on mobile, 3 on tablet, 6 on desktop
+- Improved AI chat button position for mobile (above bottom tab bar: bottom-20 on mobile vs bottom-5 on desktop)
+- Added safe-area-bottom CSS for iOS safe area support
+- Added scrollbar-thin utility class for better scroll appearance
+- Optimized ChatMarkdownRenderer: improved table styling with larger text, more padding, rounded corners
+- All lint checks pass
+- Verified with Agent Browser: mobile bottom tabs work, More menu shows all features, desktop sidebar has groups, AI chat renders tables correctly
+
+Stage Summary:
+- Students can now see and access all features immediately:
+  - Mobile: 5 bottom tabs always visible + More menu for all features
+  - Desktop: Grouped sidebar with all features + feature hub cards on landing page
+  - Landing page: "Que veux-tu faire ?" navigation cards for feature discovery
+- No more hidden features behind hamburger menu
+- Navigation pattern similar to Duolingo/Instagram (familiar to students)
+- All features (Dashboard, Training, Theory, Progress, History, Converters) are one tap away

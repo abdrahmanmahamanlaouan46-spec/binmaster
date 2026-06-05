@@ -205,3 +205,29 @@
 .scroll-smooth {
   scroll-behavior: smooth;
 }
+
+/* =========================================
+   Mobile Safe Area for Bottom Tab Bar
+   ========================================= */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Thin scrollbar utility */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: oklch(from var(--border) l c h / 60%);
+  border-radius: 4px;
+}

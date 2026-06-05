@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { useAppStore } from "@/lib/store";
+import { useAppStore, AppSection } from "@/lib/store";
 import {
   Zap,
   ArrowRight,
@@ -15,6 +15,11 @@ import {
   Monitor,
   Cpu,
   Hash,
+  LayoutDashboard,
+  ArrowRightLeft,
+  Dumbbell,
+  History,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -73,6 +78,65 @@ const testimonials = [
   },
 ];
 
+// Feature navigation cards for the hub section
+const featureNavCards: {
+  id: AppSection;
+  label: string;
+  description: string;
+  icon: React.ReactNode;
+  color: string;
+  bgColor: string;
+}[] = [
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    description: "Vue d'ensemble de ta progression",
+    icon: <LayoutDashboard className="h-6 w-6" />,
+    color: "text-blue-600 dark:text-blue-400",
+    bgColor: "bg-blue-500/10",
+  },
+  {
+    id: "dec2bin",
+    label: "Décimal → Binaire",
+    description: "Convertis avec les divisions par 2",
+    icon: <ArrowRightLeft className="h-6 w-6" />,
+    color: "text-emerald-600 dark:text-emerald-400",
+    bgColor: "bg-emerald-500/10",
+  },
+  {
+    id: "bin2dec",
+    label: "Binaire → Décimal",
+    description: "Convertis avec les puissances de 2",
+    icon: <Binary className="h-6 w-6" />,
+    color: "text-orange-600 dark:text-orange-400",
+    bgColor: "bg-orange-500/10",
+  },
+  {
+    id: "training",
+    label: "Entraînement",
+    description: "Exercices de 3 niveaux de difficulté",
+    icon: <Dumbbell className="h-6 w-6" />,
+    color: "text-purple-600 dark:text-purple-400",
+    bgColor: "bg-purple-500/10",
+  },
+  {
+    id: "theory",
+    label: "Théorie",
+    description: "Cours et explications détaillées",
+    icon: <BookOpen className="h-6 w-6" />,
+    color: "text-cyan-600 dark:text-cyan-400",
+    bgColor: "bg-cyan-500/10",
+  },
+  {
+    id: "progress",
+    label: "Progrès & Badges",
+    description: "Statistiques et récompenses",
+    icon: <Trophy className="h-6 w-6" />,
+    color: "text-yellow-600 dark:text-yellow-400",
+    bgColor: "bg-yellow-500/10",
+  },
+];
+
 export function LandingPage() {
   const { setCurrentSection } = useAppStore();
 
@@ -86,14 +150,14 @@ export function LandingPage() {
           <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-12">
           <motion.div
             className="text-center"
             initial="initial"
             animate="animate"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="mb-6">
+            <motion.div variants={fadeInUp} className="mb-5">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
                 <Sparkles className="h-4 w-4" />
                 Nouvelle façon d'apprendre
@@ -102,7 +166,7 @@ export function LandingPage() {
 
             <motion.h1
               variants={fadeInUp}
-              className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight mb-6"
+              className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
             >
               Comprendre enfin le{" "}
               <span className="text-primary relative">
@@ -126,16 +190,16 @@ export function LandingPage() {
 
             <motion.p
               variants={fadeInUp}
-              className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8"
+              className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6"
             >
               Visualisez chaque étape des conversions décimal ↔ binaire.
               Apprenez par la pratique avec des exercices interactifs et un suivi de progression intelligent.
             </motion.p>
 
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button
                 size="lg"
-                className="text-base px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                className="text-base px-8 py-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                 onClick={() => setCurrentSection("dec2bin")}
               >
                 Commencer à apprendre
@@ -144,7 +208,7 @@ export function LandingPage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="text-base px-8 py-6 rounded-xl"
+                className="text-base px-8 py-5 rounded-xl"
                 onClick={() => setCurrentSection("theory")}
               >
                 <BookOpen className="mr-2 h-5 w-5" />
@@ -158,7 +222,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="mt-16 max-w-3xl mx-auto"
+            className="mt-12 max-w-3xl mx-auto"
           >
             <Card className="overflow-hidden shadow-2xl border-2 border-primary/10">
               <CardContent className="p-0">
@@ -170,7 +234,7 @@ export function LandingPage() {
                   </div>
                   <span className="text-xs text-muted-foreground ml-2 font-mono">BinMaster — Conversion</span>
                 </div>
-                <div className="p-6 sm:p-8 space-y-4">
+                <div className="p-5 sm:p-8 space-y-3">
                   <div className="flex items-center gap-4 flex-wrap">
                     <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary font-mono font-bold text-2xl">
                       <Hash className="h-5 w-5" />
@@ -183,7 +247,7 @@ export function LandingPage() {
                       11001₂
                     </div>
                   </div>
-                  <div className="space-y-2 text-sm font-mono">
+                  <div className="space-y-1.5 text-sm font-mono">
                     <div className="flex items-center gap-3">
                       <span className="text-muted-foreground w-6">1.</span>
                       <span>25 ÷ 2 = <strong>12</strong> reste <strong className="text-primary">1</strong></span>
@@ -205,7 +269,7 @@ export function LandingPage() {
                       <span>1 ÷ 2 = <strong>0</strong> reste <strong className="text-primary">1</strong></span>
                     </div>
                   </div>
-                  <div className="pt-3 border-t">
+                  <div className="pt-2 border-t">
                     <p className="text-sm text-muted-foreground">
                       Lecture de bas en haut : <strong className="text-primary">1 1 0 0 1</strong> → <strong className="text-green-600 dark:text-green-400">11001₂</strong>
                     </p>
@@ -217,20 +281,68 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-muted/30">
+      {/* ============================================ */}
+      {/* Feature Navigation Hub - KEY SECTION         */}
+      {/* This is what makes features discoverable!    */}
+      {/* ============================================ */}
+      <section className="py-14 bg-muted/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="text-center mb-12"
+            className="text-center mb-8"
           >
-            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold mb-4">
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold mb-3">
+              Que veux-tu faire ? 🎯
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-muted-foreground text-base max-w-xl mx-auto">
+              Choisis une fonctionnalité pour commencer ton apprentissage du binaire.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4"
+          >
+            {featureNavCards.map((card, i) => (
+              <motion.div key={i} variants={fadeInUp}>
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setCurrentSection(card.id)}
+                  className="w-full flex flex-col items-center text-center p-4 sm:p-5 rounded-xl border border-border/60 bg-card hover:shadow-lg hover:border-primary/20 transition-all duration-300 group h-full"
+                >
+                  <div className={`h-12 w-12 sm:h-14 sm:w-14 rounded-xl ${card.bgColor} ${card.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}>
+                    {card.icon}
+                  </div>
+                  <h3 className="font-bold text-xs sm:text-sm mb-1 leading-tight">{card.label}</h3>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground leading-snug hidden sm:block">{card.description}</p>
+                </motion.button>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-14">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="text-center mb-10"
+          >
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold mb-3">
               Tout pour maîtriser le binaire
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-muted-foreground text-base max-w-2xl mx-auto">
               Des outils pédagogiques conçus pour rendre l'apprentissage du système binaire intuitif et motivant.
             </motion.p>
           </motion.div>
@@ -240,16 +352,16 @@ export function LandingPage() {
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
             {features.map((feature, i) => (
               <motion.div key={i} variants={fadeInUp}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-border/50 group">
-                  <CardContent className="p-6">
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                  <CardContent className="p-5">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-3 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                       {feature.icon}
                     </div>
-                    <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
+                    <h3 className="font-semibold text-base mb-2">{feature.title}</h3>
                     <p className="text-sm text-muted-foreground">{feature.description}</p>
                   </CardContent>
                 </Card>
@@ -260,19 +372,19 @@ export function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="py-20">
+      <section className="py-14 bg-muted/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="text-center mb-12"
+            className="text-center mb-10"
           >
-            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold mb-4">
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold mb-3">
               Comment ça marche ?
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-muted-foreground text-base max-w-2xl mx-auto">
               En trois étapes simples, le binaire n'aura plus de secrets pour vous.
             </motion.p>
           </motion.div>
@@ -282,31 +394,31 @@ export function LandingPage() {
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
             {[
               {
                 step: "01",
-                icon: <Cpu className="h-8 w-8" />,
+                icon: <Cpu className="h-7 w-7" />,
                 title: "Entrez un nombre",
                 desc: "Tapez un nombre décimal ou binaire dans le convertisseur.",
               },
               {
                 step: "02",
-                icon: <Sparkles className="h-8 w-8" />,
+                icon: <Sparkles className="h-7 w-7" />,
                 title: "Visualisez les étapes",
                 desc: "Chaque étape du calcul est affichée avec des animations claires.",
               },
               {
                 step: "03",
-                icon: <Trophy className="h-8 w-8" />,
+                icon: <Trophy className="h-7 w-7" />,
                 title: "Pratiquez et progressez",
                 desc: "Entraînez-vous avec des exercices et suivez votre progression.",
               },
             ].map((item, i) => (
               <motion.div key={i} variants={fadeInUp} className="text-center">
-                <div className="relative inline-block mb-6">
-                  <div className="h-20 w-20 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                <div className="relative inline-block mb-5">
+                  <div className="h-18 w-18 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto p-4">
                     {item.icon}
                   </div>
                   <span className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
@@ -322,16 +434,16 @@ export function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-14">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="text-center mb-12"
+            className="text-center mb-10"
           >
-            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold mb-4">
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold mb-3">
               Ce qu'en disent les étudiants
             </motion.h2>
           </motion.div>
@@ -341,13 +453,13 @@ export function LandingPage() {
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
           >
             {testimonials.map((t, i) => (
               <motion.div key={i} variants={fadeInUp}>
                 <Card className="h-full">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-3 mb-3">
                       <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">
                         {t.avatar}
                       </div>
@@ -368,34 +480,45 @@ export function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-14 bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
               Prêt à maîtriser le binaire ?
             </h2>
-            <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
+            <p className="text-muted-foreground text-base mb-6 max-w-xl mx-auto">
               Commencez dès maintenant et découvrez une nouvelle façon d'apprendre le système binaire.
             </p>
-            <Button
-              size="lg"
-              className="text-base px-10 py-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-              onClick={() => setCurrentSection("dec2bin")}
-            >
-              Démarrer maintenant
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                size="lg"
+                className="text-base px-8 py-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                onClick={() => setCurrentSection("dec2bin")}
+              >
+                Démarrer maintenant
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-base px-8 py-5 rounded-xl"
+                onClick={() => setCurrentSection("training")}
+              >
+                <Dumbbell className="mr-2 h-5 w-5" />
+                S'entraîner
+              </Button>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t bg-card">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="py-6 border-t bg-card">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <div className="h-6 w-6 rounded bg-primary flex items-center justify-center">
               <Zap className="h-3 w-3 text-primary-foreground" />
