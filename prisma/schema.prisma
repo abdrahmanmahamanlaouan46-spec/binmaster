@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ConversionHistory {
+  id          String   @id @default(cuid())
+  type        String   // "dec2bin" or "bin2dec"
+  input       String
+  output      String
+  steps       String   // JSON string of steps
+  createdAt   DateTime @default(now())
+}
+
+model StudentProgress {
+  id              String   @id @default(cuid())
+  totalExercises  Int      @default(0)
+  correctAnswers  Int      @default(0)
+  streak          Int      @default(0)
+  bestStreak      Int      @default(0)
+  level           Int      @default(1)
+  xp              Int      @default(0)
+  badges          String   @default("[]") // JSON array of badge IDs
+  dec2binCount    Int      @default(0)
+  bin2decCount    Int      @default(0)
+  updatedAt       DateTime @updatedAt
+}
+
+model ExerciseResult {
+  id          String   @id @default(cuid())
+  type        String   // "dec2bin" or "bin2dec"
+  difficulty  String   // "easy", "medium", "hard"
+  question    String
+  correctAnswer String
+  userAnswer  String
+  isCorrect   Boolean
+  hint        String?
+  createdAt   DateTime @default(now())
+}
