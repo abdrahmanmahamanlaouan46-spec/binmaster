@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getFallbackResponse } from "@/lib/bot-responses";
 
 const SYSTEM_PROMPT = `Tu es BinBot, un assistant pédagogique IA spécialisé dans l'enseignement du système binaire et des conversions entre décimal et binaire. Tu fais partie de l'application BinMaster.
 
@@ -81,31 +82,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Import z-ai-web-dev-sdk dynamically (server-side only)
-    const ZAI = (await import("z-ai-web-dev-sdk")).default;
-    const zai = await ZAI.create();
+    // Try to use z-ai-web-dev-sdk if available
+    try {
+      const ZAI = (await import("z-ai-web-dev-sdk")).default;
+      const zai = await ZAI.create();
 
-    // Build messages array with system prompt
-    const allMessages = [
-      { role: "assistant", content: SYSTEM_PROMPT },
-      ...messages,
-    ];
+      const allMessages = [
+        { role: "assistant", content: SYSTEM_PROMPT },
+        ...messages,
+      ];
 
-    const completion = await zai.chat.completions.create({
-      messages: allMessages,
-      thinking: { type: "disabled" },
-    });
+      const completion = await zai.chat.completions.create({
+        messages: allMessages,
+        thinking: { type: "disabled" },
+      });
 
-    const response = completion.choices[0]?.message?.content;
+      const response = completion.choices[0]?.message?.content;
 
-    if (!response) {
-      return NextResponse.json(
-        { error: "Réponse vide de l'IA" },
-        { status: 500 }
-      );
+      if (response) {
+        return NextResponse.json({ response });
+      }
+    } catch {
+      // SDK not available (e.g., on Vercel without .z-ai-config)
+      console.log("z-ai-web-dev-sdk not available, using fallback responses");
     }
 
-    return NextResponse.json({ response });
+    // Fallback: use pre-built intelligent responses
+    const lastUserMessage = messages.filter((m: { role: string }) => m.role === "user").pop();
+    const userText = lastUserMessage?.content || "";
+    const fallbackResponse = getFallbackResponse(userText);
+
+    return NextResponse.json({ response: fallbackResponse });
   } catch (error) {
     console.error("AI Chat error:", error);
     const message = error instanceof Error ? error.message : "Erreur interne";
