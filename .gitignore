@@ -71,3 +71,4 @@ prompt
 
 # Deploy scripts (internal)
 deploy.sh
+upload/

@@ -27,6 +27,7 @@ model StudentProgress {
   badges          String   @default("[]") // JSON array of badge IDs
   dec2binCount    Int      @default(0)
   bin2decCount    Int      @default(0)
+  hardCorrect     Int      @default(0)
   updatedAt       DateTime @updatedAt
 }
 
