@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChatMarkdownRenderer } from "./ChatMarkdownRenderer";
+import { getFallbackResponse } from "@/lib/bot-responses";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -66,26 +67,41 @@ export function AIAssistant() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/ai-chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: newMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
-      });
+      // Try API first (works in dev environment with z-ai-web-dev-sdk)
+      let response: string | null = null;
 
-      const data = await res.json();
+      try {
+        const res = await fetch("/api/ai-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: newMessages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+          }),
+        });
 
-      if (!res.ok) {
-        throw new Error(data.error || "Erreur de connexion");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.response) {
+            response = data.response;
+          }
+        }
+      } catch {
+        // API not available (GitHub Pages static site)
+      }
+
+      // Fallback to intelligent pre-built responses
+      if (!response) {
+        // Simulate a small delay for natural feel
+        await new Promise((r) => setTimeout(r, 600 + Math.random() * 400));
+        response = getFallbackResponse(messageText);
       }
 
       const assistantMessage: ChatMessage = {
         role: "assistant",
-        content: data.response,
+        content: response,
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch {
@@ -169,7 +185,7 @@ export function AIAssistant() {
                     <h3 className="font-bold text-sm leading-tight">BinBot</h3>
                     <p className="text-[10px] opacity-75 flex items-center gap-1">
                       <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
-                      Assistant IA pédagogique
+                      Assistant pédagogique
                     </p>
                   </div>
                 </div>
