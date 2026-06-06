@@ -142,3 +142,62 @@ Stage Summary:
 - No more hidden features behind hamburger menu
 - Navigation pattern similar to Duolingo/Instagram (familiar to students)
 - All features (Dashboard, Training, Theory, Progress, History, Converters) are one tap away
+
+---
+Task ID: 5
+Agent: Main Agent
+Task: Transform BinMaster into installable mobile app (PWA + Capacitor for Play Store/App Store)
+
+Work Log:
+- Generated PWA icons (192x192, 512x512) using z-ai image generation with dark gradient + "01" motif
+- Created /public/manifest.json with full PWA metadata (name, icons, theme, standalone display, portrait orientation)
+- Created /public/sw.js service worker with:
+  - Static asset caching for offline support
+  - Network-first strategy for pages, cache fallback
+  - Network-only for API routes (dynamic data)
+  - Navigation fallback to cached index
+  - Cache cleanup on activate
+- Updated /src/app/layout.tsx with comprehensive PWA meta tags:
+  - Viewport configuration (no user scaling for app feel)
+  - Theme color (light/dark)
+  - Manifest link
+  - Apple Web App meta tags
+  - Open Graph tags
+  - Multiple icon sizes
+- Created /src/components/shared/InstallPrompt.tsx:
+  - Detects beforeinstallprompt event
+  - Shows animated install banner after 3 seconds
+  - "Installer" and "Plus tard" buttons
+  - Remembers dismissal in localStorage
+  - Hides when already installed (standalone mode detection)
+  - useServiceWorker() hook for SW registration
+- Installed Capacitor (@capacitor/core, @capacitor/cli, @capacitor/android, @capacitor/ios)
+- Initialized Capacitor project (capacitor.config.ts) with:
+  - App ID: com.binmaster.app
+  - Splash screen configuration
+  - Status bar configuration
+  - Android scheme: https
+- Created DEPLOYMENT.md with complete guide for:
+  - PWA installation (Android Chrome + iPhone Safari)
+  - Play Store deployment with Capacitor
+  - App Store deployment with Capacitor
+  - TWA alternative for Android
+  - PWABuilder option
+  - Hosting on Vercel
+  - Complete cost checklist
+- Fixed lint error: setState in effect body → moved to useState initializer
+- All lint checks pass
+- Verified with Agent Browser: app loads correctly, all features work, AI chat functional
+
+Stage Summary:
+- BinMaster is now a full PWA (Progressive Web App):
+  - Installable from browser on Android & iPhone
+  - Works offline with service worker caching
+  - App-like experience (standalone display, no browser UI)
+  - Custom install prompt banner
+- Capacitor configured for native app packaging:
+  - Android (Play Store) ready to build
+  - iOS (App Store) ready to build
+  - Just needs `npx cap add android/ios` and Android Studio/Xcode
+- Complete deployment guide created (DEPLOYMENT.md)
+- Next steps for user: deploy to Vercel (free), then optionally publish to stores

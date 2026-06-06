@@ -12,6 +12,7 @@ import { HistorySection } from "@/components/sections/HistorySection";
 import { TheorySection } from "@/components/sections/TheorySection";
 import { ProgressSection } from "@/components/sections/ProgressSection";
 import { AIAssistant } from "@/components/shared/AIAssistant";
+import { InstallPrompt, useServiceWorker } from "@/components/shared/InstallPrompt";
 
 function SectionRenderer() {
   const { currentSection } = useAppStore();
@@ -41,6 +42,9 @@ function SectionRenderer() {
 export default function HomePage() {
   const { setProgress, setHistory } = useAppStore();
 
+  // Register service worker for PWA
+  useServiceWorker();
+
   // Load initial data
   useEffect(() => {
     const loadData = async () => {
@@ -68,6 +72,7 @@ export default function HomePage() {
         <SectionRenderer />
       </main>
       <AIAssistant />
+      <InstallPrompt />
     </div>
   );
 }

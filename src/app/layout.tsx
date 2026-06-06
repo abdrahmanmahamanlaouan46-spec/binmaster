@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -14,13 +14,53 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
 export const metadata: Metadata = {
   title: "BinMaster — Comprendre le Binaire Facilement",
-  description: "Application éducative moderne pour apprendre les conversions décimal ↔ binaire avec des visualisations interactives étape par étape.",
-  keywords: ["binaire", "décimal", "conversion", "éducation", "EdTech", "apprentissage", "informatique"],
+  description:
+    "Application éducative moderne pour apprendre les conversions décimal ↔ binaire avec des visualisations interactives étape par étape.",
+  keywords: [
+    "binaire",
+    "décimal",
+    "conversion",
+    "éducation",
+    "EdTech",
+    "apprentissage",
+    "informatique",
+  ],
   authors: [{ name: "BinMaster" }],
+  manifest: "/manifest.json",
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "BinMaster",
+  },
+  openGraph: {
+    type: "website",
+    title: "BinMaster — Comprendre le Binaire Facilement",
+    description:
+      "Apprenez les conversions décimal ↔ binaire avec des visualisations interactives.",
+    siteName: "BinMaster",
   },
 };
 
@@ -31,6 +71,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="BinMaster" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
