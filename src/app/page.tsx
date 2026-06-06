@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useAppStore } from "@/lib/store";
 import { Navigation } from "@/components/shared/Navigation";
 import { LandingPage } from "@/components/sections/LandingPage";
@@ -40,29 +40,8 @@ function SectionRenderer() {
 }
 
 export default function HomePage() {
-  const { setProgress, setHistory } = useAppStore();
-
   // Register service worker for PWA
   useServiceWorker();
-
-  // Load initial data
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [progressRes, historyRes] = await Promise.all([
-          fetch("/api/progress"),
-          fetch("/api/history"),
-        ]);
-        const progressData = await progressRes.json();
-        const historyData = await historyRes.json();
-        setProgress(progressData);
-        setHistory(historyData);
-      } catch {
-        // Use default state
-      }
-    };
-    loadData();
-  }, [setProgress, setHistory]);
 
   return (
     <div className="min-h-screen flex flex-col">

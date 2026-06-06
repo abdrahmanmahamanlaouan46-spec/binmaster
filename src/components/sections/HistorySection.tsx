@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   History,
@@ -18,29 +18,11 @@ import { useAppStore, HistoryItem } from "@/lib/store";
 import { toast } from "sonner";
 
 export function HistorySection() {
-  const { history, setHistory } = useAppStore();
+  const { history, clearHistory } = useAppStore();
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const res = await fetch("/api/history");
-        const data = await res.json();
-        setHistory(data);
-      } catch {
-        // Use local state
-      }
-    };
-    fetchHistory();
-  }, [setHistory]);
-
-  const handleClearHistory = async () => {
-    try {
-      await fetch("/api/history", { method: "DELETE" });
-      setHistory([]);
-      toast.success("Historique effacé");
-    } catch {
-      toast.error("Erreur lors de la suppression");
-    }
+  const handleClearHistory = () => {
+    clearHistory();
+    toast.success("Historique effacé");
   };
 
   const formatDate = (dateStr: string) => {

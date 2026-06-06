@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useAppStore, ExerciseData } from "@/lib/store";
+import { generateExercise, BADGES } from "@/lib/conversions";
 import { toast } from "sonner";
 
 const difficulties = [
@@ -59,7 +60,7 @@ const specificErrors: Record<string, string> = {
 export function TrainingMode() {
   const {
     progress,
-    setProgress,
+    updateProgress,
     currentExercise,
     setCurrentExercise,
     exerciseAnswer,
@@ -83,13 +84,15 @@ export function TrainingMode() {
     setShowHint(false);
 
     try {
-      const res = await fetch("/api/exercise", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: selectedType, difficulty: selectedDifficulty }),
-      });
-      const data = await res.json();
-      setCurrentExercise(data);
+      const data = generateExercise(selectedType, selectedDifficulty);
+      const exercise: ExerciseData = {
+        type: selectedType,
+        difficulty: selectedDifficulty,
+        question: data.question,
+        answer: data.answer,
+        hint: data.hint,
+      };
+      setCurrentExercise(exercise);
     } catch {
       toast.error("Erreur lors de la génération de l'exercice");
     } finally {
@@ -122,30 +125,20 @@ export function TrainingMode() {
       message,
     });
 
-    // Update progress
-    try {
-      const res = await fetch("/api/progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          isCorrect,
-          difficulty: selectedDifficulty,
-          type: selectedType,
-        }),
-      });
-      const data = await res.json();
-      setProgress(data);
+    // Update progress via store
+    const previousBadges = progress.badges;
+    updateProgress(isCorrect, selectedDifficulty, selectedType);
 
-      if (data.newBadges && data.newBadges.length > 0) {
-        data.newBadges.forEach((badgeId: string) => {
-          const badge = { id: badgeId };
-          toast.success(`🏅 Nouveau badge débloqué !`, {
-            description: `Félicitations !`,
-          });
+    // Check for newly earned badges
+    const { progress: updatedProgress } = useAppStore.getState();
+    const newBadges = updatedProgress.badges.filter((id: string) => !previousBadges.includes(id));
+    if (newBadges.length > 0) {
+      newBadges.forEach((badgeId: string) => {
+        const badge = BADGES.find((b) => b.id === badgeId);
+        toast.success(`🏅 Nouveau badge débloqué !`, {
+          description: badge ? badge.name : "Félicitations !",
         });
-      }
-    } catch {
-      // Silent fail
+      });
     }
   };
 

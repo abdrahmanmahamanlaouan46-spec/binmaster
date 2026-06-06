@@ -201,3 +201,38 @@ Stage Summary:
   - Just needs `npx cap add android/ios` and Android Studio/Xcode
 - Complete deployment guide created (DEPLOYMENT.md)
 - Next steps for user: deploy to Vercel (free), then optionally publish to stores
+
+---
+Task ID: 6
+Agent: Main Agent
+Task: Prepare BinMaster for Vercel deployment and Play Store
+
+Work Log:
+- Identified Vercel compatibility issue: SQLite (file-based DB) doesn't work on Vercel's serverless/read-only filesystem
+- Refactored Zustand store (/src/lib/store.ts) to use localStorage persistence:
+  - Added loadFromStorage/saveToStorage helpers
+  - Added clearHistory() and updateProgress() methods
+  - History and progress persist in localStorage automatically
+  - No more need for server-side database
+- Refactored all 5 components to remove API route dependencies:
+  - Dec2BinConverter: uses decimalToBinary() directly, addToHistory from store
+  - Bin2DecConverter: uses binaryToDecimal() directly, addToHistory from store
+  - TrainingMode: uses generateExercise() directly, updateProgress from store
+  - HistorySection: uses store history/clearHistory, no more API calls
+  - ProgressSection: uses store progress, no more API calls
+- Only /api/ai-chat route remains (needs z-ai-web-dev-sdk, server-side only)
+- Updated next.config.ts: removed "output: standalone" for standard Vercel deployment
+- Created deploy.sh script for one-command Vercel deployment
+- Installed Vercel CLI (v54.9.1)
+- Updated capacitor.config.ts with instructions for Vercel URL
+- Tested conversion (42 → 101010) working client-side without API
+- All lint checks pass
+
+Stage Summary:
+- App is now 100% Vercel-compatible:
+  - No SQLite dependency (data in localStorage)
+  - All conversions run client-side
+  - Only one API route needed (ai-chat, server-side)
+  - PWA fully functional
+- To deploy: `vercel login` then `vercel --prod --yes`
+- For Play Store: deploy to Vercel first, then use Capacitor with the Vercel URL

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   Trophy,
@@ -20,20 +20,7 @@ import { useAppStore } from "@/lib/store";
 import { BADGES } from "@/lib/conversions";
 
 export function ProgressSection() {
-  const { progress, setProgress } = useAppStore();
-
-  useEffect(() => {
-    const fetchProgress = async () => {
-      try {
-        const res = await fetch("/api/progress");
-        const data = await res.json();
-        setProgress(data);
-      } catch {
-        // Use local state
-      }
-    };
-    fetchProgress();
-  }, [setProgress]);
+  const { progress } = useAppStore();
 
   const accuracy = progress.totalExercises > 0
     ? Math.round((progress.correctAnswers / progress.totalExercises) * 100)

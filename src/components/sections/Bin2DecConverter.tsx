@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/lib/store";
-import { Bin2DecStep, getBitVisualization } from "@/lib/conversions";
+import { binaryToDecimal, Bin2DecStep, getBitVisualization } from "@/lib/conversions";
 
 export function Bin2DecConverter() {
   const [input, setInput] = useState("");
@@ -46,17 +46,7 @@ export function Bin2DecConverter() {
     setIsConverting(true);
 
     try {
-      const res = await fetch("/api/convert", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "bin2dec", input: binary }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error);
-        return;
-      }
+      const data = binaryToDecimal(binary);
 
       setResult(data);
 
@@ -66,31 +56,17 @@ export function Bin2DecConverter() {
         setAnimatedStep(i);
       }
 
-      // Save to history
-      try {
-        await fetch("/api/history", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "bin2dec",
-            input: data.input,
-            output: data.output,
-            steps: data.steps,
-          }),
-        });
-        addToHistory({
-          id: Date.now().toString(),
-          type: "bin2dec",
-          input: data.input,
-          output: data.output,
-          steps: JSON.stringify(data.steps),
-          createdAt: new Date().toISOString(),
-        });
-      } catch {
-        // Silent fail
-      }
-    } catch {
-      setError("Erreur de connexion au serveur");
+      // Save to history via store
+      addToHistory({
+        id: Date.now().toString(),
+        type: "bin2dec",
+        input: data.input,
+        output: data.output,
+        steps: JSON.stringify(data.steps),
+        createdAt: new Date().toISOString(),
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur lors de la conversion");
     } finally {
       setIsConverting(false);
     }
